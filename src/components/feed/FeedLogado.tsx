@@ -5,6 +5,7 @@ import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
 import NovaPublicacaoModal from "./NovaPublicacaoModal";
 import { getProfessores } from "../../services/professor";
+import { theme } from "../../styles/theme";
 
 interface Professor {
   id: number;
@@ -19,12 +20,14 @@ const FeedLogado: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   useEffect(() => {
     const fetchProfessores = async () => {
       try {
         const data = await getProfessores();
-        // Mocking the split between new and all professors for now
+        //arbitrario, pode mudar depois
         setNovosProfessores(data.slice(0, 4));
         setTodosProfessores(data);
         setLoading(false);
@@ -40,10 +43,21 @@ const FeedLogado: React.FC = () => {
   if (loading) return <div>Carregando...</div>;
   if (error) return <div>{error}</div>;
 
+  const filteredProfessores = todosProfessores
+    .filter((professor) =>
+      professor.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.nome.localeCompare(b.nome);
+      }
+      return b.nome.localeCompare(a.nome);
+    });
+
   return (
     <div>
       <Header isAuthenticated={true} />
-      <main style={{ padding: "2rem", backgroundColor: "#f0f2f5" }}>
+      <main style={{ padding: "2rem", backgroundColor: theme.colors.background }}>
         <div
           style={{
             display: "flex",
@@ -53,7 +67,7 @@ const FeedLogado: React.FC = () => {
           }}
         >
           <h2 style={{ fontSize: "1.5rem" }}>Novos Professores</h2>
-          <BuscaProfessor />
+          <BuscaProfessor searchTerm={searchTerm} onSearchChange={setSearchTerm} />
         </div>
         <div
           style={{
@@ -67,7 +81,7 @@ const FeedLogado: React.FC = () => {
             <ProfessorCard key={professor.id} {...professor} />
           ))}
         </div>
-        <hr style={{ border: "1px solid #ccc", margin: "2rem 0" }} />
+        <hr style={{ border: `1px solid ${theme.colors.gray}`, margin: "2rem 0" }} />
         <div
           style={{
             display: "flex",
@@ -83,8 +97,8 @@ const FeedLogado: React.FC = () => {
               style={{
                 padding: "0.5rem 1.5rem",
                 fontSize: "1rem",
-                backgroundColor: "#4A90E2",
-                color: "white",
+                backgroundColor: theme.colors.primary,
+                color: theme.colors.white,
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -92,7 +106,7 @@ const FeedLogado: React.FC = () => {
             >
               Nova Publicação
             </button>
-            <OrdenarDropdown />
+            <OrdenarDropdown onSortChange={setSortOrder} />
           </div>
         </div>
         <div
@@ -102,15 +116,15 @@ const FeedLogado: React.FC = () => {
             gap: "1.5rem",
           }}
         >
-          {todosProfessores.map((professor) => (
+          {filteredProfessores.map((professor) => (
             <ProfessorCard key={professor.id} {...professor} />
           ))}
         </div>
+        <NovaPublicacaoModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </main>
-      <NovaPublicacaoModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   );
 };

@@ -13,7 +13,7 @@ export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
-    // 👇 Exemplo simples: verifica token no localStorage
+    // teste simples de verificar token no localStorage
     const token = localStorage.getItem("token"); 
     setIsAuthenticated(!!token);
   }, []);

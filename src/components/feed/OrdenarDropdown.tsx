@@ -1,10 +1,27 @@
 import React from 'react';
+import { theme } from '../../styles/theme';
 
-const OrdenarDropdown: React.FC = () => {
+interface OrdenarDropdownProps {
+  onSortChange: (sortOrder: 'asc' | 'desc') => void;
+}
+
+const OrdenarDropdown: React.FC<OrdenarDropdownProps> = ({ onSortChange }) => {
   return (
-    <button style={{ padding: '0.5rem 1.5rem', fontSize: '1rem', backgroundColor: '#4A90E2', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>
-      Ordenar
-    </button>
+    <select
+      onChange={(e) => onSortChange(e.target.value as 'asc' | 'desc')}
+      style={{
+        padding: '0.5rem 1.5rem',
+        fontSize: '1rem',
+        backgroundColor: theme.colors.primary,
+        color: theme.colors.white,
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+      }}
+    >
+      <option value="asc">Ordenar A-Z</option>
+      <option value="desc">Ordenar Z-A</option>
+    </select>
   );
 };
 
