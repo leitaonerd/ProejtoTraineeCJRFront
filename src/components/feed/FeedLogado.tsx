@@ -4,58 +4,41 @@ import BuscaProfessor from "./BuscaProfessor";
 import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
 import NovaPublicacaoModal from "./NovaPublicacaoModal";
+import { getProfessores } from "../../services/professor";
 
-interface Post {
+interface Professor {
   id: number;
-  autor: string;
-  conteudo: string;
-  data: string;
+  nome: string;
+  disciplina: string;
+  avatar?: string;
 }
 
 const FeedLogado: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [novosProfessores, setNovosProfessores] = useState<Professor[]>([]);
+  const [todosProfessores, setTodosProfessores] = useState<Professor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   useEffect(() => {
-    // Altere a URL abaixo para o endpoint real do seu backend
-    fetch("http://localhost:3001/feed", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Erro ao buscar o feed");
-        return res.json();
-      })
-      .then((data) => {
-        setPosts(data);
+    const fetchProfessores = async () => {
+      try {
+        const data = await getProfessores();
+        // Mocking the split between new and all professors for now
+        setNovosProfessores(data.slice(0, 4));
+        setTodosProfessores(data);
         setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
+      } catch (err) {
+        setError("Erro ao buscar os professores");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProfessores();
   }, []);
 
-  if (loading) return <div>Carregando feed...</div>;
-  if (error) return <div>Erro: {error}</div>;
-
-  // Mock data for professors, should be replaced with API call
-  const novosProfessores = [
-    { id: 1, nome: "Nome", disciplina: "Disciplina" },
-    { id: 2, nome: "Nome", disciplina: "Disciplina" },
-    { id: 3, nome: "Nome", disciplina: "Disciplina" },
-    { id: 4, nome: "Nome", disciplina: "Disciplina" },
-  ];
-
-  const todosProfessores = [
-    { id: 5, nome: "Nome", disciplina: "Disciplina" },
-    { id: 6, nome: "Nome", disciplina: "Disciplina" },
-    { id: 7, nome: "Nome", disciplina: "Disciplina" },
-    { id: 8, nome: "Nome", disciplina: "Disciplina" },
-  ];
+  if (loading) return <div>Carregando...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
