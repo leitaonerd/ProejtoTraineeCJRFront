@@ -6,9 +6,10 @@ const api = axios.create({
 });
 
 export const getUsuario = async () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
     const response = await api.get("/usuarios/me", {
         headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
         },
     });
     return response.data;

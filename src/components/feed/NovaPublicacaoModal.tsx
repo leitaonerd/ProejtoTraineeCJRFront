@@ -5,20 +5,11 @@ import { getProfessores } from '../../services/professor';
 import { getDisciplinas } from '../../services/disciplina';
 import { getUsuario } from '../../services/usuario';
 import { theme } from '../../styles/theme';
+import { Professor, Disciplina } from '../../types/professor';
 
 interface NovaPublicacaoModalProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface Professor {
-  id: number;
-  nome: string;
-}
-
-interface Disciplina {
-    id: number;
-    nome: string;
 }
 
 const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClose }) => {

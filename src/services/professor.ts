@@ -11,9 +11,10 @@ export const getProfessores = async () => {
 };
 
 export const createAvaliacao = async (data: { usuarioID: number; professorID: number; disciplinaID: number; conteudo: string; }) => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
   const response = await api.post('/avaliacoes', data, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;

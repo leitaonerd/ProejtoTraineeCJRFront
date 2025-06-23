@@ -8,9 +8,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
-  return (
-    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', backgroundColor: theme.colors.secondary }}>
-      <Image src="/logo.png" alt="Logo" width={50} height={50} />
+  return (    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', backgroundColor: theme.colors.secondary }}>
+      <Image src="/next.svg" alt="Logo" width={50} height={50} />
       <div>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>

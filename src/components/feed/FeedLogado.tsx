@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Header from "../ui/Header";
+import Header from "../ui/header";
 import BuscaProfessor from "./BuscaProfessor";
 import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
 import NovaPublicacaoModal from "./NovaPublicacaoModal";
 import { getProfessores } from "../../services/professor";
 import { theme } from "../../styles/theme";
-
-interface Professor {
-  id: number;
-  nome: string;
-  disciplina: string;
-  avatar?: string;
-}
+import { Professor } from "../../types/professor";
 
 const FeedLogado: React.FC = () => {
   const [novosProfessores, setNovosProfessores] = useState<Professor[]>([]);

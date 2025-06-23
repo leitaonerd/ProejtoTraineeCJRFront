@@ -4,18 +4,19 @@ import FeedDeslogado from "@/components/feed/FeedDeslogado";
 import FeedLogado from "@/components/feed/FeedLogado";
 import { useEffect, useState } from "react";
 
-export const metadata: HeadMetaType = {
+const metadata: HeadMetaType = {
   title: "Avaliação de Professores",
   description: "Avaliação de professores da Universidade de Brasília",
 };
 
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
   useEffect(() => {
-    // teste simples de verificar token no localStorage
-    const token = localStorage.getItem("token"); 
-    setIsAuthenticated(!!token);
+    // Check if we're on the client side
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem("token"); 
+      setIsAuthenticated(!!token);
+    }
   }, []);
 
   return (
