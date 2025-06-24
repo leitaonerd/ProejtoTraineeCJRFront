@@ -21,8 +21,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       
-      <Header isAuthenticated={isLoggedIn} />
-      
       <main className="container mx-auto px-4 py-6">
         {loading ? (
           <div className="flex justify-center items-center h-64">

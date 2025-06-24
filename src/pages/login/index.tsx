@@ -6,6 +6,8 @@ import { HeadMetaType } from '@/types/headMetaType';
 import Input from '@/components/ui/Input';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
+import initial from '../../../public/initial.png'; // Adjust the path and filename as needed
 
 const metadata: HeadMetaType = {
   title: "Login - Avaliação de Professores",
@@ -53,58 +55,64 @@ export default function Login() {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
       </Head>
-      
-      <main className="min-h-screen flex items-center justify-center bg-background">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">Entrar</h1>
-          
-          <form onSubmit={handleSubmit} className="space-y-6">
+
+      <div className="flex flex-col md:flex-row h-screen w-screen bg-[#EDEDED]">
+        
+        <div className="relative hidden md:block md:w-1/2 h-full">
+          <Image
+            src={initial}
+            alt="Imagem de fundo de login"
+            layout="fill" 
+            objectFit="cover" 
+          />
+        </div>
+
+        <div className="flex flex-col items-center justify-center w-1/2 h-full bg-[#EDEDED] p-8">
+
+          <div className="text-[43px] text-center mb-10 leading-none font-Questrial">
+            Avaliação de <br></br> Professores
+          </div>
+
+          <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-6">
             <Input
               type="email"
-              label="Email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
               error={errors.email}
               disabled={loading}
+              className='flex items-center justify-start rounded-xl'
             />
-            
             <Input
               type="password"
-              label="Senha"
+              placeholder="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="********"
               error={errors.password}
-              disabled={loading}
+              className='flex items-center justify-start rounded-xl'
             />
-            
-            <button
-              type="submit"
-              className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors disabled:opacity-50"
-              disabled={loading}
-            >
-              {loading ? 'Carregando...' : 'Entrar'}
-            </button>
           </form>
-          
-          <div className="mt-4 text-center">
-            <p>
-              Não tem uma conta?{' '}
-              <Link href="/cadastro" className="text-primary hover:underline">
-                Cadastre-se
-              </Link>
-            </p>
-          </div>
-          
-          {/* Testing credentials for convenience */}
-          <div className="mt-8 p-4 bg-gray-50 rounded-md">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Credenciais para teste:</h3>
-            <p className="text-xs text-gray-500">Email: teste@example.com</p>
-            <p className="text-xs text-gray-500">Senha: senha123</p>
+          <div className='flex flex-col md:flex-row justify-center gap-y-4 gap-x-[29px] mt-12 w-full max-w-lg'> 
+              <button
+                type="submit"
+                className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
+                            hover:bg-[#86E0B3]" 
+                disabled={loading}
+              >
+                {loading ? 'Carregando...' : 'Entrar'}
+              </button>
+              <button
+                type="submit"
+                className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
+                            hover:bg-[#86E0B3]"
+                disabled={loading}
+              >
+                {loading ? 'Carregando...' : 'Criar Conta'}
+              </button>
           </div>
         </div>
-      </main>
+
+      </div>
     </>
   );
 }
