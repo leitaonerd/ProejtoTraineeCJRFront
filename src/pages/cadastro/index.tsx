@@ -8,26 +8,35 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
 import initial from '../../../public/initial.png'; // Adjust the path and filename as needed
+import ImageUploadComponent from '@/components/ImageUpload';
 
-const metadata: HeadMetaType = {
-  title: "Login - Avaliação de Professores",
-  description: "Faça login para avaliar professores",
-};
-
-export default function Login() {
+export default function Cadastro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  
+  const [nome, setNome] = useState('');
+  const [departamento, setDepartamento] = useState('');
+  const [curso, setCurso] = useState('');
+  const [errors, setErrors] = useState<{ 
+    email?: string; 
+    password?: string; 
+    nome?: string; 
+    departamento?: string; 
+    curso?: string;
+  }>({});
+
   const router = useRouter();
   const { login, loading } = useAuth();
 
   const validateForm = () => {
-    const newErrors: { email?: string; password?: string } = {};
+    const newErrors: { email?: string; password?: string; 
+        nome?: string; departamento?: string; curso?: string } = {};
     
     if (!email) newErrors.email = 'Email é obrigatório';
     if (!password) newErrors.password = 'Senha é obrigatória';
-    
+    if (!nome) newErrors.nome = 'Nome é obrigatório';
+    if (!departamento) newErrors.departamento = 'Departamento é obrigatório';
+    if (!curso) newErrors.curso = 'Curso é obrigatório';
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -52,8 +61,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
+        <title>Cadastro</title>
       </Head>
 
       <div className="flex flex-col md:flex-row h-screen w-screen bg-[#EDEDED]">
@@ -67,13 +75,22 @@ export default function Login() {
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center w-1/2 h-full bg-[#EDEDED] p-8">
+        <div className="flex flex-col items-center justify-start w-1/2 bg-[#EDEDED] -mt-4">
 
-          <div className="text-[43px] text-center mb-10 leading-none font-Questrial">
-            Avaliação de <br></br> Professores
+          <div className=" -mb-8 max-w-lg"> {/* Aproxima o formulário do topo */}
+            <ImageUploadComponent />
           </div>
 
-          <form className="w-full max-w-lg space-y-6">
+          <form className="w-full max-w-lg space-y-4"> {/* Mantém o resto igual */}
+            <Input
+              type="text"
+              placeholder="Nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              error={errors.nome}
+              disabled={loading}
+              className='flex items-center justify-start rounded-xl'
+            />
             <Input
               type="email"
               placeholder="Email"
@@ -89,22 +106,32 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={errors.password}
+              disabled={loading}
+              className='flex items-center justify-start rounded-xl'
+            />
+            <Input
+              type="text"
+              placeholder="Curso"
+              value={curso}
+              onChange={(e) => setCurso(e.target.value)}
+              error={errors.curso}
+              disabled={loading}
+              className='flex items-center justify-start rounded-xl'
+            />
+            <Input
+              type="text"
+              placeholder="Departamento"
+              value={departamento}
+              onChange={(e) => setDepartamento(e.target.value)}
+              error={errors.departamento}
+              disabled={loading}
               className='flex items-center justify-start rounded-xl'
             />
           </form>
-          <div className='flex flex-col md:flex-row justify-center gap-y-4 gap-x-[29px] mt-12 w-full max-w-lg'> 
+          <div className='flex flex-col md:flex-row justify-center gap-y-4 gap-x-[29px] mt-8 w-full max-w-lg'> 
               <button
                 type="submit"
-                className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
-                            hover:bg-[#86E0B3]" 
-                disabled={loading}
-                onClick={handleSubmit}
-              >
-                {loading ? 'Carregando...' : 'Entrar'}
-              </button>
-              <button
-                type="submit"
-                className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
+                className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-2xl w-[223px] h-[73px] rounded-2xl
                             hover:bg-[#86E0B3]"
                 disabled={loading}
               >
