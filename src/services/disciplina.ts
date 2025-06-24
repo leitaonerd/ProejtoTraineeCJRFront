@@ -1,11 +1,9 @@
-// ainda em duvida sobre, pode ter jeitos melhores de fazer
-import axios from 'axios';
+import { Disciplina } from '../types/professor';
+import { mockDisciplinas } from '../mock/data';
 
-const api = axios.create({
-  baseURL: 'http://localhost:3001', //mudar depois
-});
-
-export const getDisciplinas = async () => {
-  const response = await api.get('/disciplinas');
-  return response.data;
+// Using mock data instead of API calls
+export const getDisciplinas = async (): Promise<Disciplina[]> => {
+  // Simulate a network delay for testing loading states
+  await new Promise(resolve => setTimeout(resolve, 600));
+  return mockDisciplinas;
 };

@@ -1,11 +1,12 @@
-// components/feed/NovaPublicacaoModal.tsx
 import React, { useState, useEffect } from 'react';
 import { createAvaliacao } from '../../services/professor';
 import { getProfessores } from '../../services/professor';
 import { getDisciplinas } from '../../services/disciplina';
 import { getUsuario } from '../../services/usuario';
-import { theme } from '../../styles/theme';
 import { Professor, Disciplina } from '../../types/professor';
+import Modal from '../ui/modal';
+import Select from '../ui/Select';
+import TextArea from '../ui/TextArea';
 
 interface NovaPublicacaoModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
   const [disciplinaId, setDisciplinaId] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [professores, setProfessores] = useState<Professor[]>([]);
   const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
   const [usuarioID, setUsuarioID] = useState<number | null>(null);
@@ -25,6 +27,7 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
     if (isOpen) {
       const fetchData = async () => {
         try {
+          setLoading(true);
           const [professoresData, disciplinasData, usuarioData] = await Promise.all([
             getProfessores(),
             getDisciplinas(),
@@ -35,6 +38,8 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
           setUsuarioID(usuarioData.id);
         } catch (err) {
           setError("Erro ao carregar dados");
+        } finally {
+          setLoading(false);
         }
       };
       fetchData();
@@ -45,12 +50,29 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
     e.preventDefault();
     setError(null);
 
+    // Validation
+    if (!professorId) {
+      setError("Selecione um professor");
+      return;
+    }
+
+    if (!disciplinaId) {
+      setError("Selecione uma disciplina");
+      return;
+    }
+
+    if (!conteudo.trim()) {
+      setError("O conteúdo da avaliação é obrigatório");
+      return;
+    }
+
     if (!usuarioID) {
-        setError("Usuário não autenticado");
-        return;
+      setError("Usuário não autenticado");
+      return;
     }
 
     try {
+      setLoading(true);
       await createAvaliacao({
         usuarioID,
         professorID: parseInt(professorId),
@@ -58,48 +80,75 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
         conteudo,
       });
       onClose();
+      // Could add toast notification here
     } catch (err) {
       setError("Erro ao criar a avaliação");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isOpen) return null;
+  const professorOptions = professores.map(p => ({
+    value: p.id,
+    label: p.nome
+  }));
+
+  const disciplinaOptions = disciplinas.map(d => ({
+    value: d.id,
+    label: d.nome
+  }));
 
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ backgroundColor: theme.colors.white, padding: '2rem', borderRadius: '8px', width: '500px' }}>
-        <h2>Nova Publicação</h2>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Professor</label>
-            <select value={professorId} onChange={(e) => setProfessorId(e.target.value)} style={{ width: '100%', padding: '0.5rem' }}>
-              <option value="">Selecione um professor</option>
-              {professores.map((p) => (
-                <option key={p.id} value={p.id}>{p.nome}</option>
-              ))}
-            </select>
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Disciplina</label>
-            <select value={disciplinaId} onChange={(e) => setDisciplinaId(e.target.value)} style={{ width: '100%', padding: '0.5rem' }}>
-                <option value="">Selecione uma disciplina</option>
-                {disciplinas.map((d) => (
-                    <option key={d.id} value={d.id}>{d.nome}</option>
-                ))}
-            </select>
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Conteúdo</label>
-            <textarea value={conteudo} onChange={(e) => setConteudo(e.target.value)} style={{ width: '100%', padding: '0.5rem' }} />
-          </div>
-          {error && <p style={{ color: theme.colors.danger }}>{error}</p>}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-            <button type="button" onClick={onClose} style={{ padding: '0.5rem 1.5rem' }}>Cancelar</button>
-            <button type="submit" style={{ padding: '0.5rem 1.5rem', backgroundColor: theme.colors.primary, color: theme.colors.white, border: 'none', borderRadius: '8px' }}>Publicar</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Modal isOpen={isOpen} onClose={onClose} title="Nova Publicação">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Select 
+          label="Professor"
+          value={professorId}
+          onChange={(e) => setProfessorId(e.target.value)}
+          options={professorOptions}
+          placeholder="Selecione um professor"
+          disabled={loading}
+        />
+        
+        <Select
+          label="Disciplina"
+          value={disciplinaId}
+          onChange={(e) => setDisciplinaId(e.target.value)}
+          options={disciplinaOptions}
+          placeholder="Selecione uma disciplina"
+          disabled={loading}
+        />
+        
+        <TextArea
+          label="Conteúdo da Avaliação"
+          value={conteudo}
+          onChange={(e) => setConteudo(e.target.value)}
+          placeholder="Escreva sua avaliação aqui..."
+          rows={5}
+          disabled={loading}
+        />
+        
+        {error && <p className="text-red-500">{error}</p>}
+        
+        <div className="flex justify-end gap-3 mt-4">
+          <button 
+            type="button" 
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+            disabled={loading}
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit"
+            className="px-4 py-2 bg-primary text-white rounded-md shadow-sm text-sm font-medium hover:bg-blue-600 focus:outline-none"
+            disabled={loading}
+          >
+            {loading ? 'Enviando...' : 'Publicar'}
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 

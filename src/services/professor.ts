@@ -1,21 +1,22 @@
-// ainda em duvida sobre, pode ter jeitos melhores de fazer
-import axios from 'axios';
+import { Professor } from '../types/professor';
+import { mockProfessores, addAvaliacao } from '../mock/data';
 
-const api = axios.create({
-  baseURL: 'http://localhost:3001', //mudar depois
-});
+export interface AvaliacaoData {
+  usuarioID: number;
+  professorID: number;
+  disciplinaID: number;
+  conteudo: string;
+}
 
-export const getProfessores = async () => {
-  const response = await api.get('/professores');
-  return response.data;
+// Using mock data instead of API calls
+export const getProfessores = async (): Promise<Professor[]> => {
+  // Simulate a network delay for testing loading states
+  await new Promise(resolve => setTimeout(resolve, 500));
+  return mockProfessores;
 };
 
-export const createAvaliacao = async (data: { usuarioID: number; professorID: number; disciplinaID: number; conteudo: string; }) => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-  const response = await api.post('/avaliacoes', data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
+export const createAvaliacao = async (data: AvaliacaoData) => {
+  // Simulate a network delay for testing loading states
+  await new Promise(resolve => setTimeout(resolve, 800));
+  return addAvaliacao(data);
 };

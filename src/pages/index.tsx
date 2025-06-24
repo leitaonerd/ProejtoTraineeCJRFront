@@ -2,7 +2,8 @@ import Head from "next/head";
 import { HeadMetaType } from "@/types/headMetaType";
 import FeedDeslogado from "@/components/feed/FeedDeslogado";
 import FeedLogado from "@/components/feed/FeedLogado";
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import Header from "@/components/ui/header";
 
 const metadata: HeadMetaType = {
   title: "Avaliação de Professores",
@@ -10,14 +11,7 @@ const metadata: HeadMetaType = {
 };
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  useEffect(() => {
-    // Check if we're on the client side
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem("token"); 
-      setIsAuthenticated(!!token);
-    }
-  }, []);
+  const { isLoggedIn, loading } = useAuth();
 
   return (
     <>
@@ -26,8 +20,17 @@ export default function Home() {
         <meta name="description" content={metadata.description} />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
-      <main>
-        {isAuthenticated ? <FeedLogado /> : <FeedDeslogado />}
+      
+      <Header isAuthenticated={isLoggedIn} />
+      
+      <main className="container mx-auto px-4 py-6">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-lg">Carregando...</p>
+          </div>
+        ) : (
+          isLoggedIn ? <FeedLogado /> : <FeedDeslogado />
+        )}
       </main>
     </>
   );
