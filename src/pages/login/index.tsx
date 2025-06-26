@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Link from 'next/link';
+import Link from 'next/link'; 
 import { HeadMetaType } from '@/types/headMetaType';
 import Input from '@/components/ui/Input';
 import { useAuth } from '@/context/AuthContext';
@@ -96,7 +96,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
-                            hover:bg-[#86E0B3]" 
+                            hover:bg-[#86E0B3] transition-all duration-300 ease-in-out hover:scale-110" 
                 disabled={loading}
               >
                 {loading ? 'Carregando...' : 'Entrar'}
@@ -104,7 +104,7 @@ export default function Login() {
               <button
                 type="submit"
                 className="bg-[#A4FED3] border-2 border-[#222E50] text-[#222E50] text-xl w-[223px] h-[73px] rounded-2xl
-                            hover:bg-[#86E0B3]"
+                            hover:bg-[#86E0B3] transition-all duration-300 ease-in-out hover:scale-110 "
                 disabled={loading}
               >
                 {loading ? 'Carregando...' : 'Criar Conta'}
