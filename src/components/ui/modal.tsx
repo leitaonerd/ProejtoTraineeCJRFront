@@ -1,31 +1,30 @@
 import React from 'react';
-import { theme } from '../../styles/theme';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-8 w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ✕
-          </button>
-        </div>
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+      <div className="relative bg-green-300 rounded-3xl p-6 w-full max-w-2xl mx-4 shadow-lg">
+        {/*botao de close se precisar */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white text-2xl p-1 bg-black bg-opacity-20 rounded-full hover:bg-opacity-30 transition"
+        >
+          &times;
+        </button>
+
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
