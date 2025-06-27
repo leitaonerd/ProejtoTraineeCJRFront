@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { Inter, Questrial } from "next/font/google";
 import '../styles/globals.css';
 import { Metadata } from 'next';
+import { AuthProvider } from '@/context/AuthContext';
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div className={`${inter.variable} ${questrial.variable}`}>
+    <AuthProvider>
       <Component {...pageProps} />
-    </div>
+    </AuthProvider>
   );
 }
 

@@ -4,10 +4,16 @@ import { User } from "../types/user";
 
 export interface AuthResponse {
   token: string;
-  };
+};
 
-export const handleLogin = async (email : string, senha: string ) : Promise<AuthResponse> => {
-  const response = await api.post('/login', {email,senha});
+export interface LoginData {
+  email: string;
+  senha: string;
+}
+
+
+export const handleLogin = async (data: LoginData) => {
+  const response = await api.post('/login', data);
   return response.data;
 }
 

@@ -1,82 +1,56 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { isAuthenticated, login, logout } from '../services/auth';
-import { mockUser } from '../mock/data';
+// src/context/AuthContext.tsx
 
-// Define the context types
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+// Define o formato dos dados que nosso contexto irá fornecer
 interface AuthContextType {
   isLoggedIn: boolean;
-  user: typeof mockUser | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
   loading: boolean;
+  login: (token: string) => void;
+  logout: () => void;
 }
 
-// Create the context with a default value
-const AuthContext = createContext<AuthContextType>({
-  isLoggedIn: false,
-  user: null,
-  login: async () => {},
-  logout: async () => {},
-  loading: false,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Provider component
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<typeof mockUser | null>(null);
-  const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // Check if user is authenticated on mount
   useEffect(() => {
-    const checkAuth = async () => {
-      const loggedIn = isAuthenticated();
-      
-      if (loggedIn) {
-        // In a real app, you'd fetch user data here
-        setUser(mockUser);
-      }
-      
-      setLoading(false);
-    };
-    
-    checkAuth();
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+    setLoading(false);
   }, []);
 
-  // Login handler
-  const handleLogin = async (email: string, password: string) => {
-    setLoading(true);
-    try {
-      await login(email, password);
-      setUser(mockUser);
-    } finally {
-      setLoading(false);
-    }
+  const login = (token: string) => {
+    localStorage.setItem('authToken', token);
+    setIsLoggedIn(true);
   };
 
-  // Logout handler
-  const handleLogout = async () => {
-    setLoading(true);
-    try {
-      await logout();
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: !!user,
-        user,
-        login: handleLogin,
-        logout: handleLogout,
-        loading,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    isLoggedIn,
+    loading,
+    login,
+    logout,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-// Custom hook to use the auth context
-export const useAuth = () => useContext(AuthContext);
+// Cria o nosso custom hook `useAuth`
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+  }
+  return context;
+};

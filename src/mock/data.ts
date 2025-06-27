@@ -1,5 +1,5 @@
 import { Professor, Disciplina } from '../types/professor';
-import { User } from '../services/usuario';
+import { User } from '../types/user';
 import { AvaliacaoData } from '../services/professor';
 
 // Mock Professors
@@ -28,6 +28,9 @@ export const mockUser: User = {
   id: 1,
   nome: 'Usuário Teste',
   email: 'usuario@teste.com',
+  senha: 'senha123',
+  departamento: 'cic',
+  curso: 'cic'
 };
 
 // Mock Avaliações

@@ -35,7 +35,7 @@ export default function Cadastro() {
     try{
       const response = await handleRegister({nome,email,senha,departamento,curso,fotoPerfil})
       alert(`Usuário cadastrado: ${response}`);
-       router.push("/")
+       router.push("/login")
     }catch(error : any){
       alert(`Erro ao realizar o cadastro: ${error}`)
     }

@@ -15,3 +15,4 @@ export const getUsuario = async (): Promise<User> => {
   
   return mockUser;
 };
+
