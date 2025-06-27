@@ -1,15 +1,28 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
-import { AuthProvider } from '../context/AuthContext';
+import { Inter, Questrial } from "next/font/google";
+import '../styles/globals.css';
+import { Metadata } from 'next';
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+const questrial = Questrial({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-questrial',
+});
+export const metadata: Metadata = {
+  title: "Avaliação de Professores",
+  description: "Avaliação de professores da Universidade de Brasília",
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    <div className={`${inter.variable} ${questrial.variable}`}>
       <Component {...pageProps} />
-      <ToastContainer position="top-right" autoClose={3000} />
-    </AuthProvider>
+    </div>
   );
 }
 

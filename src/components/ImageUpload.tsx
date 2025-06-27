@@ -4,7 +4,11 @@ import { FaCamera } from 'react-icons/fa';
 
 import defaultProfileImage from '../../public/profile.svg';
 
-const ImageUploadComponent = () => {
+interface ImageUploadComponentProps {
+  onImageSelected: (file: File | null) => void; // A nova prop
+}
+
+const ImageUploadComponent : React.FC<ImageUploadComponentProps> = ({ onImageSelected }) => {
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -35,6 +39,7 @@ const ImageUploadComponent = () => {
         return;
       }
       setImage(file);
+      onImageSelected(file);
     } else {
       setImage(null);
     }
