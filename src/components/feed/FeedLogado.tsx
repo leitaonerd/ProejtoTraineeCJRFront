@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Header from "../ui/header";
 import BuscaProfessor from "./BuscaProfessor";
 import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
@@ -50,7 +49,6 @@ const FeedLogado: React.FC = () => {
 
   return (
     <div>
-      <Header isAuthenticated={true} />
       <main style={{ padding: "2rem", backgroundColor: theme.colors.background }}>
         <div
           style={{
