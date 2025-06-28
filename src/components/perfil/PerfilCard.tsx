@@ -4,12 +4,13 @@ import { mockUsuarios } from "@/mock/dataPerfil";
 import ExcluirPerfil from "./ExcluirPerfil";
 import { isAuthenticated } from "@/services/auth";
 import EditarPerfil from "./EditarPerfil";
-interface PerfilInfoProps {
+
+interface PerfilCardProps {
   usuarioID: number;
   isAuthenticated: boolean;
 }
 
-const PerfilInfo: React.FC<PerfilInfoProps> = ({
+const PerfilCard: React.FC<PerfilCardProps> = ({
   usuarioID,
   isAuthenticated,
 }) => {
@@ -21,10 +22,7 @@ const PerfilInfo: React.FC<PerfilInfoProps> = ({
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
-      <div
-        className="rounded-2xl overflow-hidden shadow-xl"
-        style={{ height: "400px" }}
-      >
+      <div className="overflow-hidden shadow-xl" style={{ height: "400px" }}>
         <div className="bg-green-300 h-[45%] w-full" />
 
         <div className="bg-white h-[55%] w-full px-6 pb-6 pt-16 relative">
@@ -61,4 +59,4 @@ const PerfilInfo: React.FC<PerfilInfoProps> = ({
   );
 };
 
-export default PerfilInfo;
+export default PerfilCard;

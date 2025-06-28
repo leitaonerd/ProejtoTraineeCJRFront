@@ -47,7 +47,8 @@ export const mockAvaliacoes = [
     usuarioID: 1,
     professorID: 101,
     disciplinaID: 201,
-    conteudo: "O professor é ótimo, explica bem e tem paciência.",
+    conteudo:
+      "O professor é ótimo, explica bem e tem paciência.ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
     createdAt: "2024-06-20T10:00:00Z",
   },
   {
@@ -68,7 +69,7 @@ export const mockAvaliacoes = [
   },
   {
     id: 4,
-    usuarioID: 4,
+    usuarioID: 1,
     professorID: 103,
     disciplinaID: 204,
     conteudo: "Muito teórico, senti falta de exemplos práticos.",
@@ -76,7 +77,7 @@ export const mockAvaliacoes = [
   },
   {
     id: 5,
-    usuarioID: 5,
+    usuarioID: 1,
     professorID: 101,
     disciplinaID: 202,
     conteudo: "Adorei as aulas! Muito dinâmicas.",
