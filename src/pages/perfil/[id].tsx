@@ -1,8 +1,7 @@
 import { mockUsuarios, mockAvaliacoes } from "@/mock/dataPerfil";
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
-import PerfilAcoes from "@/components/perfil/PerfilAcoes";
-import PerfilInfo from "@/components/perfil/PerfilInfo";
+import PerfilInfo from "@/components/perfil/PerfilCard";
 import Header from "@/components/ui/header";
 
 export default function PerfilPage() {
@@ -17,12 +16,12 @@ export default function PerfilPage() {
       {isLoggedIn ? (
         <div>
           <Header isAuthenticated={true} />
-          <PerfilInfo usuarioID={usuarioID} />
+          <PerfilInfo usuarioID={usuarioID} isAuthenticated={true} />
         </div>
       ) : (
         <div>
           <Header isAuthenticated={false} />
-          <PerfilInfo usuarioID={usuarioID} />
+          <PerfilInfo usuarioID={usuarioID} isAuthenticated={false} />
         </div>
       )}
     </main>
