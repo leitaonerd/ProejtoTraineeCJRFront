@@ -47,11 +47,30 @@ const PerfilCard: React.FC<PerfilCardProps> = ({
             <h2 className="text-2xl font-bold text-gray-800">
               {usuario?.nome}
             </h2>
-            <p className="text-base text-gray-600 mt-1">
-              {usuario?.departamento}
-            </p>
-            <p className="text-base text-gray-600 mt-1">{usuario?.curso}</p>
-            <p className="text-base text-gray-600 mt-1">{usuario?.email}</p>
+            <div className="flex items-center gap-2 flex-wrap mt-1">
+              <span>
+                <Image
+                  src={"/building.png"}
+                  alt="Foto de departamento"
+                  width={24}
+                  height={24}
+                />
+              </span>
+              <span className="text-base text-gray-600">
+                {usuario?.departamento}
+              </span>
+              <span> | </span>
+              <span className="text-base text-gray-600">{usuario?.curso}</span>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap mt-1">
+              <Image
+                src={"/email.png"}
+                alt="Foto de departamento"
+                width={24}
+                height={24}
+              />
+              <p className="text-base text-gray-600 mt-1">{usuario?.email}</p>
+            </div>
           </div>
         </div>
       </div>
