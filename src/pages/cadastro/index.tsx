@@ -7,7 +7,7 @@ import Input from '@/components/ui/Input';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-toastify';
 import Image from 'next/image';
-import initial from '../../../public/initial.png'; // Adjust the path and filename as needed
+import initial from '../../../public/initial.png';
 import ImageUploadComponent from '@/components/ImageUpload';
 
 export default function Cadastro() {
@@ -77,11 +77,11 @@ export default function Cadastro() {
 
         <div className="flex flex-col items-center justify-start w-1/2 bg-[#EDEDED] -mt-4">
 
-          <div className=" -mb-8 max-w-lg"> {/* Aproxima o formulário do topo */}
+          <div className=" -mb-8 max-w-lg"> 
             <ImageUploadComponent />
           </div>
 
-          <form className="w-full max-w-lg space-y-4"> {/* Mantém o resto igual */}
+          <form className="w-full max-w-lg space-y-4">
             <Input
               type="text"
               placeholder="Nome"

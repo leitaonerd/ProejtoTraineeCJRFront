@@ -45,15 +45,13 @@ const ImageUploadComponent = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 rounded-lg max-w-xs mx-auto my-8"> {/* Diminuído p-5 para p-4, max-w-sm para max-w-xs, my-12 para my-8 */}
-      {/* Wrapper do Avatar */}
+    <div className="flex flex-col items-center p-4 rounded-lg max-w-xs mx-auto my-8">
       <div
-        className="relative w-24 h-24 rounded-full overflow-hidden border-black bg-black flex justify-center items-center cursor-pointer" // Diminuído w-36 h-36 para w-24 h-24, border-2 para border
+        className="relative w-24 h-24 rounded-full overflow-hidden border-black bg-black flex justify-center items-center cursor-pointer" 
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleUploadClick}
       >
-        {/* Imagem do Avatar */}
         {previewUrl ? (
           <Image
             src={previewUrl}
@@ -72,7 +70,6 @@ const ImageUploadComponent = () => {
           />
         )}
 
-        {/* Overlay semi-transparente e Ícone da câmera */}
         <div
           className={`
             absolute inset-0
@@ -82,12 +79,11 @@ const ImageUploadComponent = () => {
             ${isHovered ? 'opacity-100' : 'opacity-0'}
           `}
         >
-          <FaCamera className="w-6 h-6 text-white" /> {/* Diminuído w-8 h-8 para w-6 h-6 */}
-          <span className="text-white text-xs mt-0.5">Alterar Foto</span> {/* Diminuído text-sm para text-xs, mt-1 para mt-0.5 */}
+          <FaCamera className="w-6 h-6 text-white" /> 
+          <span className="text-white text-xs mt-0.5">Alterar Foto</span> 
         </div>
       </div>
 
-      {/* Input de arquivo (escondido) */}
       <input
         type="file"
         ref={fileInputRef}
