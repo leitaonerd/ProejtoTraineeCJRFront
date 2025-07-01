@@ -17,20 +17,22 @@ const FeedLogado: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-  useEffect(() => {
-    const fetchProfessores = async () => {
-      try {
-        const data = await getProfessores();
-        //arbitrario, pode mudar depois
-        setNovosProfessores(data.slice(0, 4));
-        setTodosProfessores(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Erro ao buscar os professores");
-        setLoading(false);
-      }
-    };
+  const fetchProfessores = async () => {
+    try {
+      setLoading(true);
+      const data = await getProfessores();
+      //arbitrario, pode mudar depois
+      setNovosProfessores(data.slice(0, 4));
+      setTodosProfessores(data);
+      setError(null); // Clear any previous errors
+      setLoading(false);
+    } catch (err) {
+      setError("Erro ao buscar os professores");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProfessores();
   }, []);
 
@@ -117,6 +119,10 @@ const FeedLogado: React.FC = () => {
         <NovaPublicacaoModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          onSuccess={() => {
+            // Refresh data after successful creation of a new publication
+            fetchProfessores();
+          }}
         />
       </main>
     </div>

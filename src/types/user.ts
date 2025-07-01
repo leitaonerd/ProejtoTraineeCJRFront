@@ -1,13 +1,13 @@
 import { AvaliacaoData } from "@/services/professor";
 
 export interface User {
-  id?: number;
+  id: number;
   nome: string;
   email: string;
-  senha : string,
   departamento: string;
-  curso: string
+  curso: string;
   fotoPerfil?: File | null; 
+  avatar?: string; // URL to avatar image
   createdAt?: Date;
   updatedAt?: Date;
   Avaliações?: AvaliacaoData[]

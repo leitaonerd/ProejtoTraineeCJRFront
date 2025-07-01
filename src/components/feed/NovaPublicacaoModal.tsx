@@ -9,9 +9,10 @@ import Modal from '../ui/modal';
 interface NovaPublicacaoModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void; // Callback when publication is successful
 }
 
-const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClose }) => {
+const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClose, onSuccess }) => {
   const [professorId, setProfessorId] = useState("");
   const [disciplinaId, setDisciplinaId] = useState("");
   const [conteudo, setConteudo] = useState("");
@@ -20,9 +21,17 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
   const [professores, setProfessores] = useState<Professor[]>([]);
   const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
   const [usuarioID, setUsuarioID] = useState<number | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen) {
+      // Reset form and messages when modal opens
+      setProfessorId("");
+      setDisciplinaId("");
+      setConteudo("");
+      setError(null);
+      setSuccessMessage(null);
+      
       const fetchData = async () => {
         try {
           setLoading(true);
@@ -31,6 +40,10 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
             getDisciplinas(),
             getUsuario(),
           ]);
+          console.log('Fetched professoresData:', professoresData);
+          console.log('Fetched disciplinasData:', disciplinasData);
+          console.log('Fetched usuarioData:', usuarioData);
+          
           setProfessores(professoresData);
           setDisciplinas(disciplinasData);
           setUsuarioID(usuarioData.id);
@@ -47,6 +60,15 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    console.log('Form submission state:', { 
+      professorId, 
+      disciplinaId, 
+      conteudo, 
+      usuarioID,
+      professorCount: professores.length,
+      disciplinaCount: disciplinas.length
+    });
 
     // Validation
     if (!professorId) {
@@ -71,12 +93,17 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
 
     try {
       setLoading(true);
-      await createAvaliacao({
+      const result = await createAvaliacao({
         usuarioID,
         professorID: parseInt(professorId),
         disciplinaID: parseInt(disciplinaId),
         conteudo,
       });
+      
+      console.log('Publication created successfully:', result);
+      
+      // Show success message
+      setSuccessMessage("Avaliação criada com sucesso!");
       
       // Reset form on success
       setProfessorId("");
@@ -84,9 +111,27 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
       setConteudo("");
       setError(null);
       
+      // Call onSuccess if provided
+      if (onSuccess) {
+        onSuccess();
+      }
+      
       onClose();
-    } catch (err) {
-      setError("Erro ao criar a avaliação");
+    } catch (err: any) {
+      console.error('Error creating evaluation:', err);
+      
+      // Handle different types of errors
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setError(`Erro ${err.response.status}: ${err.response.data.message || 'Falha ao criar a avaliação'}`);
+      } else if (err.request) {
+        // The request was made but no response was received
+        setError("Sem resposta do servidor. Verifique sua conexão com a internet.");
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setError(`Erro ao criar a avaliação: ${err.message || 'Erro desconhecido'}`);
+      }
     } finally {
       setLoading(false);
     }
@@ -104,12 +149,18 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
             disabled={loading}
             className="w-full bg-white text-gray-700 px-4 py-3 rounded-full focus:outline-none"
           >
-            <option value="">Nome do professor</option>
-            {professores.map((professor) => (
-              <option key={professor.id} value={professor.id}>
-                {professor.nome}
-              </option>
-            ))}
+            <option value="">
+              {loading ? 'Carregando professores...' : 'Nome do professor'}
+            </option>
+            {professores && professores.length > 0 ? (
+              professores.map((professor) => (
+                <option key={professor.id} value={professor.id}>
+                  {professor.nome}
+                </option>
+              ))
+            ) : !loading && (
+              <option value="" disabled>Nenhum professor encontrado</option>
+            )}
           </select>
 
           {/* Selecionar disciplina */}
@@ -119,28 +170,41 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
             disabled={loading}
             className="w-full bg-white text-gray-700 px-4 py-3 rounded-full focus:outline-none"
           >
-            <option value="">Disciplina</option>
-            {disciplinas.map((disciplina) => (
-              <option key={disciplina.id} value={disciplina.id}>
-                {disciplina.nome}
-              </option>
-            ))}
+            <option value="">
+              {loading ? 'Carregando disciplinas...' : 'Disciplina'}
+            </option>
+            {disciplinas && disciplinas.length > 0 ? (
+              disciplinas.map((disciplina) => (
+                <option key={disciplina.id} value={disciplina.id}>
+                  {disciplina.nome}
+                </option>
+              ))
+            ) : !loading && (
+              <option value="" disabled>Nenhuma disciplina encontrada</option>
+            )}
           </select>
 
           {/* Area do Texto */}
           <textarea
             value={conteudo}
             onChange={(e) => setConteudo(e.target.value)}
-            placeholder=""
+            placeholder="Escreva sua avaliação sobre o professor e a disciplina aqui..."
             rows={8}
             disabled={loading}
-            className="w-full bg-green-200 text-gray-800 px-4 py-3 rounded-xl focus:outline-none resize-none"
+            className="w-full bg-green-200 text-gray-800 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
           />
 
           {/* Erro */}
           {error && (
             <div className="bg-red-100 border border-red-300 text-red-600 text-sm rounded-lg p-3">
               {error}
+            </div>
+          )}
+          
+          {/* Mensagem de sucesso */}
+          {successMessage && (
+            <div className="bg-green-100 border border-green-300 text-green-600 text-sm rounded-lg p-3">
+              {successMessage}
             </div>
           )}
 
