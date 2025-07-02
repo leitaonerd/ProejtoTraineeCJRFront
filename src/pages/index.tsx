@@ -19,14 +19,16 @@ export default function Home() {
         <meta name="description" content={metadata.description} />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
-      
+
       <main className="container mx-auto px-4 py-6">
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <p className="text-lg">Carregando...</p>
           </div>
+        ) : isLoggedIn ? (
+          <FeedLogado />
         ) : (
-          isLoggedIn ? <FeedLogado /> : <FeedDeslogado />
+          <FeedDeslogado />
         )}
       </main>
     </>
