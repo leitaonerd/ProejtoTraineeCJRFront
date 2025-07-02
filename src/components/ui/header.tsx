@@ -15,6 +15,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             {/* Placeholder icons */}
             <span>🔔</span>
+            {/* alterar pra puxar do backend*/}
             <Image src="/quagsire.png" alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%' }} />
             <span>📄</span>
           </div>
