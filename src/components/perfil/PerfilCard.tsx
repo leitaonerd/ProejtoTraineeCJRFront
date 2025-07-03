@@ -1,32 +1,38 @@
+// components/perfil/PerfilCard.tsx
 import Image from "next/image";
 import { User } from "@/types/user";
-import { mockUsuarios } from "@/mock/dataPerfil";
 import ExcluirPerfil from "./ExcluirPerfil";
-import { isAuthenticated } from "@/services/auth";
 import EditarPerfil from "./EditarPerfil";
 
 interface PerfilCardProps {
   usuarioID: number;
   isAuthenticated: boolean;
+  isEditable: boolean; // Adicione esta prop
+  usuario: User; // Adicione esta prop para receber os dados do usuário
 }
 
 const PerfilCard: React.FC<PerfilCardProps> = ({
   usuarioID,
   isAuthenticated,
+  isEditable, // Receba a prop isEditable
+  usuario, // Receba o objeto usuario
 }) => {
-  const usuario: User | undefined = mockUsuarios.find(
-    (u) => u.id === usuarioID
-  );
+
+  console.log('Dados recebidos no PerfilCard:', usuario);
 
   if (!usuario) return <p>Usuário não encontrado</p>;
 
+  const fotoUrl = usuario.fotoPerfil
+      ? `${process.env.NEXT_PUBLIC_API_URL}${usuario.fotoPerfil}`
+      : "/profile.svg";
+      
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
       <div className="overflow-hidden shadow-xl" style={{ height: "400px" }}>
         <div className="bg-green-300 h-[45%] w-full" />
 
         <div className="bg-white h-[55%] w-full px-6 pb-6 pt-16 relative">
-          {isAuthenticated && (
+          {isEditable && ( // Renderize condicionalmente os botões
             <div className="absolute top-3 right-12">
               <EditarPerfil />
               <div className="absolute top-12">
@@ -36,7 +42,7 @@ const PerfilCard: React.FC<PerfilCardProps> = ({
           )}
           <div className="absolute -top-16 left-20 w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
             <Image
-              src={usuario.fotoPerfil}
+              src={fotoUrl}
               alt="Foto de usuário"
               width={128}
               height={128}

@@ -1,3 +1,4 @@
+// components/perfil/PublicacaoCard.tsx
 import { MessageSquare } from "lucide-react";
 import Image from "next/image";
 
@@ -12,11 +13,13 @@ interface Publicacao {
 interface PublicacaoCardProps {
   publicacoes: Publicacao[];
   imgUser: string;
+  isEditable: boolean; // Adicione esta prop
 }
 
 const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   publicacoes,
   imgUser,
+  isEditable, // Receba a prop isEditable
 }) => {
   if (publicacoes.length === 0) {
     return <div></div>;
@@ -59,6 +62,12 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                     {pub.comentarios !== 1 ? "s" : ""}
                   </span>
                 </div>
+                {isEditable && ( // Exemplo de como você poderia adicionar botões para cada publicação
+                  <div className="flex justify-end gap-2 mt-2">
+                    <button className="text-blue-600 text-sm">Editar</button>
+                    <button className="text-red-600 text-sm">Excluir</button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

@@ -30,7 +30,7 @@ export default function Login() {
         const response = await handleLogin({email,senha})
         console.log('Resposta completa do backend:', response);
         if (response.access_token) {
-          login(response.access_token);
+          login(response.access_token, response.usuario)
           alert('Login realizado com sucesso!');
           router.push('/'); 
         }

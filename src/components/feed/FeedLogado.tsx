@@ -4,7 +4,7 @@ import BuscaProfessor from "./BuscaProfessor";
 import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
 import NovaPublicacaoModal from "./NovaPublicacaoModal";
-import { getProfessores } from "../../services/professor";
+import { getProfessores } from "../../services/ApiProfessor";
 import { theme } from "../../styles/theme";
 import { Professor } from "../../types/professor";
 
@@ -72,7 +72,7 @@ const FeedLogado: React.FC = () => {
           }}
         >
           {novosProfessores.map((professor) => (
-            <ProfessorCard key={professor.id} {...professor} />
+            <ProfessorCard disciplina={""} key={professor.id} {...professor} />
           ))}
         </div>
         <hr style={{ border: `1px solid ${theme.colors.gray}`, margin: "2rem 0" }} />
@@ -111,7 +111,7 @@ const FeedLogado: React.FC = () => {
           }}
         >
           {filteredProfessores.map((professor) => (
-            <ProfessorCard key={professor.id} {...professor} />
+            <ProfessorCard disciplina={""} key={professor.id} {...professor} />
           ))}
         </div>
         <NovaPublicacaoModal

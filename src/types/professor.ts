@@ -1,13 +1,14 @@
-export interface Professor {
-  id: number;
-  nome: string;
-  disciplina: string;
-  avatar?: string;
-}
+import { Avaliacao } from "./avaliacao";
 
-export interface Disciplina {
-  id: number;
+export interface Professor {
+  id? : number;
   nome: string;
+  disciplinaID?: number;
+  departamento: string
+  fotoPerfil?: File | null; 
+  createdAt?: Date;
+  updatedAt?: Date;
+  avaliações?: Avaliacao[]
 }
 
 export interface ProfessorCardProps {
