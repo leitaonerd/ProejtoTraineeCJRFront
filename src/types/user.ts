@@ -8,7 +8,7 @@ export interface User {
   senha : string,
   departamento: string;
   curso: string
-  fotoPerfil?: string | null; 
+  fotoPerfil?: string | File | null; 
   createdAt?: Date;
   updatedAt?: Date;
   avaliacoes?: Avaliacao[]
