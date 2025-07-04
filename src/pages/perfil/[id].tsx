@@ -7,8 +7,8 @@ import PerfilCard from "@/components/perfil/PerfilCard";
 import Header from "@/components/ui/header";
 import PublicacaoCard from "@/components/perfil/PublicacaoCard";
 import { useEffect, useState } from "react";
-import api from "@/services/api";
 import { Avaliacao } from "@/types/avaliacao";
+import { getUser } from "@/services/ApiUsuario";
 
 interface FormattedAvaliacao {
   id: number;
@@ -37,8 +37,7 @@ export default function PerfilPage() {
     const procuraPerfil = async () => {
       setPageLoading(true);
       try {
-        const response = await api.get<User>(`/usuario/${usuarioID}`);
-        const user = response.data;
+        const user : User = await getUser(usuarioID)
 
         if (!user) {
           throw new Error("Usuário não encontrado");
@@ -48,22 +47,17 @@ export default function PerfilPage() {
 
         // Pega as duas listas separadamente
         const avaliacoesDoBackend = user.avaliacoes || [];
-        const todosOsComentariosDoUsuario = user.comentarios || [];
 
         const formattedAvaliacoes: FormattedAvaliacao[] = avaliacoesDoBackend
           .filter((avaliacao: Avaliacao) => typeof avaliacao.id === "number")
           .map((avaliacao: Avaliacao) => {
             
-            const comentariosDaAvaliacao = todosOsComentariosDoUsuario.filter(
-              (comentario: any) => comentario.avaliacaoID === avaliacao.id
-            );
-
             return {
               id: avaliacao.id as number,
               conteudo: avaliacao.conteudo,
               data: new Date(avaliacao.createdAt ?? "").toLocaleString("pt-BR"),
               autorNome: user.nome,
-              comentarios: comentariosDaAvaliacao.length,
+              comentarios: avaliacao.comentarios.length,
             };
           });
 

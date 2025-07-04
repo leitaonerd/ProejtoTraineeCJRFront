@@ -1,6 +1,11 @@
 // components/perfil/PublicacaoCard.tsx
+import { useAuth } from "@/context/AuthContext";
+import { delAvaliacao } from "@/services/ApiAvaliacoes";
 import { MessageSquare } from "lucide-react";
 import Image from "next/image";
+import router from "next/router";
+import ModalConfirmar from "../ui/modalConfirmar";
+import { useState } from "react";
 
 interface Publicacao {
   id: number;
@@ -21,6 +26,30 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   imgUser,
   isEditable, // Receba a prop isEditable
 }) => {
+  const { isLoggedIn, loading, user: loggedInUser } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const deletarAvaliacao = async (id : number) => { 
+      if(isLoggedIn){
+        try{
+          const response = await delAvaliacao(id);
+          if(response.status == 200){
+            window.alert("Deletado com Sucesso");
+          }
+        }catch(error: any){
+          throw new Error("Não foi possível apagar a avalição")
+        }finally{
+          setIsModalOpen(false)
+          router.reload();
+        }
+      }else{
+        window.alert("Você não tem permissão")
+      }
+    }
+    
+  const handleCardClick = (avaliacaoId : number) => {
+    router.push(`/avaliacao/${avaliacaoId}`);
+  };
   if (publicacoes.length === 0) {
     return <div></div>;
   }
@@ -35,6 +64,7 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
             {publicacoes.map((pub) => (
               <div
                 key={pub.id}
+                onClick={() => handleCardClick(pub.id)}
                 className="bg-green-300 rounded-xl p-4 shadow mb-4"
               >
                 <div className="flex items-center gap-2 font-semibold text-sm text-gray-800 mb-1">
@@ -62,10 +92,20 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                     {pub.comentarios !== 1 ? "s" : ""}
                   </span>
                 </div>
-                {isEditable && ( // Exemplo de como você poderia adicionar botões para cada publicação
+                {isEditable && ( 
                   <div className="flex justify-end gap-2 mt-2">
-                    <button className="text-blue-600 text-sm">Editar</button>
-                    <button className="text-red-600 text-sm">Excluir</button>
+                    <button className="text-blue-600 text-sm">✏️</button>
+                    <button onClick={(event) => {event.stopPropagation(); setIsModalOpen(true) }}  className="text-red-600 text-sm">🗑️</button>
+
+                    <ModalConfirmar
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)} 
+                        onConfirm={() => deletarAvaliacao(pub.id)}  
+                        title="Confirmar Exclusão da Avaliação"
+                      >
+                    <p>Você tem certeza que deseja excluir sua Avaliação? Esta ação não pode ser desfeita.</p>
+                  </ModalConfirmar>
+                  
                   </div>
                 )}
               </div>

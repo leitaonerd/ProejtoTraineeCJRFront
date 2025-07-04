@@ -36,7 +36,7 @@ const PerfilCard: React.FC<PerfilCardProps> = ({
             <div className="absolute top-3 right-12">
               <EditarPerfil />
               <div className="absolute top-12">
-                <ExcluirPerfil />
+                <ExcluirPerfil usuarioID={usuarioID} />
               </div>
             </div>
           )}
