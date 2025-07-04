@@ -3,7 +3,7 @@ import Header from "../ui/header";
 import BuscaProfessor from "./BuscaProfessor";
 import ProfessorCard from "./ProfessorCard";
 import OrdenarDropdown from "./OrdenarDropdown";
-import { getProfessores } from "../../services/professor";
+import { getProfessores } from "../../services/ApiProfessor";
 import { theme } from "../../styles/theme";
 import { Professor } from "../../types/professor";
 

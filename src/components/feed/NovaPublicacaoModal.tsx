@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { createAvaliacao } from '../../services/professor';
-import { getProfessores } from '../../services/professor';
-import { getDisciplinas } from '../../services/disciplina';
-import { getUsuario } from '../../services/usuario';
-import { Professor, Disciplina } from '../../types/professor';
+import { getProfessores } from '../../services/ApiProfessor';
+import { getDisciplinas } from '../../services/ApiDisciplina';
+import { getAllUsers, getUser } from '../../services/ApiUsuario';
+import { Professor } from '../../types/professor';
 import Modal from '../ui/modal';
+import { Disciplina } from '@/types/disciplina';
+import { createAvaliacao } from '@/services/ApiAvaliacoes';
 
 interface NovaPublicacaoModalProps {
   isOpen: boolean;
@@ -29,7 +30,7 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
           const [professoresData, disciplinasData, usuarioData] = await Promise.all([
             getProfessores(),
             getDisciplinas(),
-            getUsuario(),
+            getAllUsers(),
           ]);
           setProfessores(professoresData);
           setDisciplinas(disciplinasData);
@@ -76,6 +77,7 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
         professorID: parseInt(professorId),
         disciplinaID: parseInt(disciplinaId),
         conteudo,
+        comentarios: []
       });
       
       // Reset form on success
@@ -93,7 +95,7 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="">
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className="bg-green-300 rounded-2xl p-6 w-full max-w-2xl mx-auto shadow-lg">
         <form onSubmit={handleSubmit} className="space-y-3">
 

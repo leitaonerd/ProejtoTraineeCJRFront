@@ -1,4 +1,5 @@
-import { AvaliacaoData } from "@/services/professor";
+import { Avaliacao } from "../types/avaliacao";
+import { Comentario } from "./comentario";
 
 export interface User {
   id?: number;
@@ -7,10 +8,11 @@ export interface User {
   senha : string,
   departamento: string;
   curso: string
-  fotoPerfil?: File | null; 
+  fotoPerfil?: string | File | null; 
   createdAt?: Date;
   updatedAt?: Date;
-  Avaliações?: AvaliacaoData[]
+  avaliacoes?: Avaliacao[]
+  comentarios?: Comentario[]
 }
 
 export interface UpdateUser{
