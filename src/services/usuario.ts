@@ -1,12 +1,5 @@
 import { mockUser } from '../mock/data';
-
-// Define a User type for better type safety
-export interface User {
-  id: number;
-  nome: string;
-  email: string;
-  // Add other user properties as needed
-}
+import { User } from "../types/user"
 
 // Using mock data instead of API calls
 export const getUsuario = async (): Promise<User> => {
@@ -22,3 +15,4 @@ export const getUsuario = async (): Promise<User> => {
   
   return mockUser;
 };
+

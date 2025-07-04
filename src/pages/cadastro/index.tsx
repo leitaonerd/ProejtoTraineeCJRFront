@@ -1,63 +1,46 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
-import { HeadMetaType } from '@/types/headMetaType';
 import Input from '@/components/ui/Input';
-import { useAuth } from '@/context/AuthContext';
-import { toast } from 'react-toastify';
 import Image from 'next/image';
 import initial from '../../../public/initial.png';
 import ImageUploadComponent from '@/components/ImageUpload';
+import {handleRegister} from "../../services/auth";
+import { useRouter } from 'next/router';
 
 export default function Cadastro() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [senha, setSenha] = useState('');
   const [nome, setNome] = useState('');
   const [departamento, setDepartamento] = useState('');
   const [curso, setCurso] = useState('');
+  const [fotoPerfil, setFotoPerfil] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ 
     email?: string; 
-    password?: string; 
+    senha?: string; 
     nome?: string; 
     departamento?: string; 
     curso?: string;
   }>({});
-
   const router = useRouter();
-  const { login, loading } = useAuth();
 
-  const validateForm = () => {
-    const newErrors: { email?: string; password?: string; 
-        nome?: string; departamento?: string; curso?: string } = {};
-    
-    if (!email) newErrors.email = 'Email é obrigatório';
-    if (!password) newErrors.password = 'Senha é obrigatória';
-    if (!nome) newErrors.nome = 'Nome é obrigatório';
-    if (!departamento) newErrors.departamento = 'Departamento é obrigatório';
-    if (!curso) newErrors.curso = 'Curso é obrigatório';
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleImageSelected = (file: File | null) => {
+    setFotoPerfil(file);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     
-    if (!validateForm()) return;
-    
-    try {
-      // For testing purposes, use the credentials:
-      // email: teste@example.com
-      // password: senha123
-      await login(email, password);
-      toast.success('Login realizado com sucesso!');
-      router.push('/');
-    } catch (error) {
-      toast.error('Credenciais inválidas. Tente novamente.');
+    try{
+      const response = await handleRegister({nome,email,senha,departamento,curso,fotoPerfil})
+      alert(`Usuário cadastrado: ${response}`);
+       router.push("/login")
+    }catch(error : any){
+      alert(`Erro ao realizar o cadastro: ${error}`)
     }
-  };
-
+  }
+  
   return (
     <>
       <Head>
@@ -75,13 +58,13 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="flex flex-col items-center justify-start w-1/2 bg-[#EDEDED] -mt-4">
+        <div className="flex flex-col items-center justify-center w-1/2 bg-[#EDEDED] -mt-4">
 
-          <div className=" -mb-8 max-w-lg"> 
-            <ImageUploadComponent />
+          <div className="-mb-8 max-w-lg"> 
+              <ImageUploadComponent onImageSelected={handleImageSelected} />
           </div>
-
-          <form className="w-full max-w-lg space-y-4">
+          
+          <form onSubmit={handleSubmit} className="w-full max-w-lg space-y-4"> 
             <Input
               type="text"
               placeholder="Nome"
@@ -103,9 +86,9 @@ export default function Cadastro() {
             <Input
               type="password"
               placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={errors.password}
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              error={errors.senha}
               disabled={loading}
               className='flex items-center justify-start rounded-xl'
             />
@@ -127,7 +110,6 @@ export default function Cadastro() {
               disabled={loading}
               className='flex items-center justify-start rounded-xl'
             />
-          </form>
           <div className='flex flex-col md:flex-row justify-center gap-y-4 gap-x-[29px] mt-8 w-full max-w-lg'> 
               <button
                 type="submit"
@@ -138,9 +120,9 @@ export default function Cadastro() {
                 {loading ? 'Carregando...' : 'Criar Conta'}
               </button>
           </div>
-        </div>
-
+        </form>
       </div>
+    </div>
     </>
   );
 }
