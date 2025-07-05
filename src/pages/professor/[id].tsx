@@ -6,7 +6,7 @@ import { Professor } from "@/types/professor";
 import { getProfessor } from "@/services/ApiProfessor";
 import { Avaliacao } from "@/types/avaliacao";
 import Header from "@/components/ui/header";
-
+import PerfilCardProfessor from "@/components/professorPerfil/PerfilCardProfessor";
 interface FormattedAvaliacao {
   id: number;
   conteudo: string;
@@ -33,10 +33,8 @@ export default function ProfessorPage() {
     const procuraProfessor = async () => {
       setPageLoading(true);
       try {
-        console.log(1);
         const professor: Professor = await getProfessor(professorID);
         if (!professor) {
-          console.log(2);
           throw new Error("Professor não encontrado");
         }
 
@@ -81,6 +79,8 @@ export default function ProfessorPage() {
   return (
     <main className="container mx-auto px-4 py-6">
       <Header isAuthenticated={isLoggedIn} />
+
+      <PerfilCardProfessor professor={professor} />
     </main>
   );
 }

@@ -1,14 +1,16 @@
 import { Avaliacao } from "./avaliacao";
+import { Disciplina } from "./disciplina";
 
 export interface Professor {
-  id? : number;
+  id?: number;
   nome: string;
   disciplinaID?: number;
-  departamento: string
-  fotoPerfil?: File | null; 
+  departamento: string;
+  fotoPerfil?: File | null;
   createdAt?: Date;
   updatedAt?: Date;
-  avaliações?: Avaliacao[]
+  avaliações?: Avaliacao[];
+  disciplina?: Disciplina;
 }
 
 export interface ProfessorCardProps {
