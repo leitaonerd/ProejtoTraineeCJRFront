@@ -20,8 +20,7 @@ interface FormattedAvaliacao {
 
 export default function PerfilPage() {
   const router = useRouter();
-  //const { id } = router.query;
-  const id = "1";
+  const { id } = router.query;
   const { isLoggedIn, loading, user: loggedInUser } = useAuth();
   const usuarioID = parseInt(id as string);
   const isEditable =
@@ -40,6 +39,7 @@ export default function PerfilPage() {
       setPageLoading(true);
       try {
         const user: User = await getUser(usuarioID);
+
         if (!user) {
           throw new Error("Usuário não encontrado");
         }
@@ -48,7 +48,6 @@ export default function PerfilPage() {
 
         // Pega as duas listas separadamente
         const avaliacoesDoBackend = user.avaliacoes || [];
-
         const formattedAvaliacoes: FormattedAvaliacao[] = avaliacoesDoBackend
           .filter((avaliacao: Avaliacao) => typeof avaliacao.id === "number")
           .map((avaliacao: Avaliacao) => {

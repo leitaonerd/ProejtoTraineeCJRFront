@@ -7,7 +7,9 @@ export const getAllUsers = async () => {
 };
 
 export const getUser = async (id: number): Promise<User> => {
+  console.log("getUser chamado");
   const response = await api.get(`/usuario/${id}`);
+  //console.log(response.data);
   return response.data;
 };
 
