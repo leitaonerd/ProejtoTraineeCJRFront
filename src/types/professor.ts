@@ -9,7 +9,7 @@ export interface Professor {
   fotoPerfil?: File | null;
   createdAt?: Date;
   updatedAt?: Date;
-  avaliações?: Avaliacao[];
+  avaliacoes?: Avaliacao[];
   disciplina?: Disciplina;
 }
 

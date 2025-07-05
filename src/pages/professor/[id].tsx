@@ -7,6 +7,8 @@ import { getProfessor } from "@/services/ApiProfessor";
 import { Avaliacao } from "@/types/avaliacao";
 import Header from "@/components/ui/header";
 import PerfilCardProfessor from "@/components/professorPerfil/PerfilCardProfessor";
+import PublicacaoCard from "@/components/perfil/PublicacaoCard";
+
 interface FormattedAvaliacao {
   id: number;
   conteudo: string;
@@ -40,7 +42,8 @@ export default function ProfessorPage() {
 
         setProfessor(professor);
 
-        const listaAvaliacoes = professor.avaliações || [];
+        const listaAvaliacoes = professor.avaliacoes || [];
+        console.log(listaAvaliacoes);
         const formattedAvaliacoes: FormattedAvaliacao[] = listaAvaliacoes
           .filter(
             (avaliacao: Avaliacao) => typeof avaliacao.professorID === "number"
@@ -54,7 +57,9 @@ export default function ProfessorPage() {
               comentarios: avaliacao.comentarios.length,
             };
           });
+
         setAvaliacoesProfessor(formattedAvaliacoes);
+        //console.log(formattedAvaliacoes);
       } catch (error: any) {
         console.error("Erro ao carregar perfil:", error.message);
         setProfessor(undefined);
@@ -81,6 +86,12 @@ export default function ProfessorPage() {
       <Header isAuthenticated={isLoggedIn} />
 
       <PerfilCardProfessor professor={professor} />
+
+      <PublicacaoCard
+        publicacoes={avaliacoesProfessor}
+        imgUser={"/quagsire.png"}
+        isEditable={false}
+      />
     </main>
   );
 }
