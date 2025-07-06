@@ -53,7 +53,7 @@ export default function ProfessorPage() {
               id: avaliacao.id as number,
               conteudo: avaliacao.conteudo,
               data: new Date(avaliacao.createdAt ?? "").toLocaleString("pt-BR"),
-              autorNome: professor.nome,
+              autorNome: avaliacao.usuario?.nome ?? "Undefined",
               comentarios: avaliacao.comentarios.length,
             };
           });
