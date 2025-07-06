@@ -6,6 +6,7 @@ import Image from "next/image";
 import router from "next/router";
 import ModalConfirmar from "../ui/modalConfirmar";
 import { useState } from "react";
+import EditarAvaliacao from "./EditarAvaliacao";
 
 interface Publicacao {
   id: number;
@@ -28,9 +29,12 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
 }) => {
   const { isLoggedIn, loading, user: loggedInUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenComent, setIsModalOpenComent] = useState(false);
+  const [idParaDeletar, setIdParaDeletar] = useState<number | null>(null);
+  const [idParaEditar, setIdParaEditar] = useState<number | null>(null);
 
   const deletarAvaliacao = async (id : number) => { 
-      if(isLoggedIn){
+        if (!isLoggedIn || idParaDeletar === null) return;
         try{
           const response = await delAvaliacao(id);
           if(response.status == 200){
@@ -42,9 +46,6 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
           setIsModalOpen(false)
           router.reload();
         }
-      }else{
-        window.alert("Você não tem permissão")
-      }
     }
     
   const handleCardClick = (avaliacaoId : number) => {
@@ -94,20 +95,25 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                 </div>
                 {isEditable && ( 
                   <div className="flex justify-end gap-2 mt-2">
-                    <button className="text-blue-600 text-sm">✏️</button>
-                    <button onClick={(event) => {event.stopPropagation(); setIsModalOpen(true) }}  className="text-red-600 text-sm">🗑️</button>
-
-                    <ModalConfirmar
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)} 
-                        onConfirm={() => deletarAvaliacao(pub.id)}  
-                        title="Confirmar Exclusão da Avaliação"
-                      >
-                    <p>Você tem certeza que deseja excluir sua Avaliação? Esta ação não pode ser desfeita.</p>
-                  </ModalConfirmar>
-                  
+                    <button onClick={(event) => { event.stopPropagation(); setIdParaEditar(pub.id); }}>✏️</button>
+                    <button onClick={(event) => { event.stopPropagation(); setIdParaDeletar(pub.id); }}>🗑️</button>
                   </div>
                 )}
+                <EditarAvaliacao
+                  isOpen={idParaEditar === pub.id}
+                  onClose={() => setIdParaEditar(null)}
+                  conteudoAvaliacao={pub.conteudo}
+                  id={pub.id}
+                />
+                                
+                <ModalConfirmar
+                  isOpen={idParaDeletar === pub.id}
+                  onClose={() => setIdParaDeletar(null)}
+                  onConfirm={() => deletarAvaliacao}
+                  title="Confirmar Exclusão da Avaliação"
+                >
+                <p>Você tem certeza que deseja excluir sua Avaliação? Esta ação não pode ser desfeita.</p>
+                </ModalConfirmar>
               </div>
             ))}
           </div>

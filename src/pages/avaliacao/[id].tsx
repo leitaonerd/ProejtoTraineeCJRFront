@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import Image from 'next/image';
 import ComentarioCard from "@/components/ui/ComentarioCard";
 import ModalConfirmar from "@/components/ui/modalConfirmar";
+import EditarComentario from "@/components/perfil/EditarAvaliacao";
+import EditarAvaliacao from "@/components/perfil/EditarAvaliacao";
 
 export default function AvaliacaoIdPage() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function AvaliacaoIdPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenComent, setIsModalOpenComent] = useState(false);
   const isEditable = isLoggedIn && loggedInUser && loggedInUser?.id === avaliacao?.usuario?.id;
   const fotoUrl = avaliacao?.usuario?.fotoPerfil 
     ? `${process.env.NEXT_PUBLIC_API_URL}${avaliacao?.usuario?.fotoPerfil}` 
@@ -110,12 +113,13 @@ export default function AvaliacaoIdPage() {
                 <div className="flex flex-row items-center space-x-2">
                    <p className="font-bold text-sm">{avaliacao.usuario?.nome}</p>
                     <p className="text-xs text-gray-700">
-                      {avaliacao.updatedAt ? new Date(avaliacao.updatedAt).toLocaleDateString() : ""}, às {avaliacao.updatedAt ? new Date(avaliacao.updatedAt).toLocaleTimeString('pt-BR', { hour:'2-digit', minute : '2-digit'}) : ""} 
+                      {avaliacao.updatedAt ? new Date(avaliacao.updatedAt).toLocaleDateString() : ""}, às {avaliacao.updatedAt ? new Date(avaliacao.updatedAt).toLocaleTimeString('pt-BR', { hour:'2-digit', minute : '2-digit'}) : ""}, sobre {avaliacao.professor?.nome}({avaliacao.professor?.departamento})
                     </p>
                 </div>
                 {isEditable && (
-                <div className="flex space-x-2">  
-                    <span>✏️</span>
+                <div className="flex space-x-2">
+                    <button onClick={() => setIsModalOpenComent(true)}>✏️</button>
+                      <EditarAvaliacao isOpen={isModalOpenComent} onClose={() => setIsModalOpenComent(false)} conteudoAvaliacao={avaliacao.conteudo} id={parseInt(id as string)}></EditarAvaliacao>
                     <button
                       onClick={() => setIsModalOpen(true)}
                     >
