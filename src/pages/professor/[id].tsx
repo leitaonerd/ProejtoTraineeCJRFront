@@ -91,6 +91,7 @@ export default function ProfessorPage() {
         publicacoes={avaliacoesProfessor}
         imgUser={"/quagsire.png"}
         isEditable={false}
+        isProfessor={true}
       />
     </main>
   );

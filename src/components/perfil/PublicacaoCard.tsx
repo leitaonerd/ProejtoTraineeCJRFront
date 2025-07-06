@@ -19,12 +19,14 @@ interface PublicacaoCardProps {
   publicacoes: Publicacao[];
   imgUser: string;
   isEditable: boolean; // Adicione esta prop
+  isProfessor: boolean;
 }
 
 const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   publicacoes,
   imgUser,
   isEditable, // Receba a prop isEditable
+  isProfessor,
 }) => {
   const { isLoggedIn, loading, user: loggedInUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -60,7 +62,7 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
         <div className="shadow-xl">
           <div className="bg-white w-full px-6 pb-6 pt-16 relative border-t border-gray-300">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Publicações
+              {isProfessor ? "Avaliações" : "Publicações"}
             </h3>
             {publicacoes.map((pub) => (
               <div

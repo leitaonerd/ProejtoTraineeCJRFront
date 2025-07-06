@@ -110,6 +110,7 @@ export default function PerfilPage() {
             : "/profile.svg"
         }
         isEditable={!!isEditable}
+        isProfessor={false}
       />
     </main>
   );
