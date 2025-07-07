@@ -20,12 +20,14 @@ interface PublicacaoCardProps {
   publicacoes: Publicacao[];
   imgUser: string;
   isEditable: boolean; // Adicione esta prop
+  isProfessor: boolean;
 }
 
 const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   publicacoes,
   imgUser,
   isEditable, // Receba a prop isEditable
+  isProfessor,
 }) => {
   const { isLoggedIn, loading, user: loggedInUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
