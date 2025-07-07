@@ -20,11 +20,16 @@ const ModalConfirmar: React.FC<ModalConfirmarProps> = ({
     return null;
   }
 
+   const handleCloseClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      onClose();
+    };
+
   return (
 
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-      onClick={onClose}
+      onClick={handleCloseClick}
     >
       <div 
         className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center"

@@ -20,3 +20,7 @@ export interface Avaliacao{
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface UpdateAvaliacao {
+  conteudo?: string; 
+}
