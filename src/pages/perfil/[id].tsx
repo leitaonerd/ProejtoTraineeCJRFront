@@ -9,6 +9,7 @@ import PublicacaoCard from "@/components/perfil/PublicacaoCard";
 import { useEffect, useState } from "react";
 import { Avaliacao } from "@/types/avaliacao";
 import { getUser } from "@/services/ApiUsuario";
+import Image from 'next/image';
 
 interface FormattedAvaliacao {
   id: number;
@@ -16,6 +17,7 @@ interface FormattedAvaliacao {
   data: string;
   autorNome: string;
   comentarios: number;
+  usuario : User
 }
 
 export default function PerfilPage() {
@@ -46,10 +48,8 @@ export default function PerfilPage() {
 
         setUsuario(user);
 
-        // Pega as duas listas separadamente
         const avaliacoesDoBackend = user.avaliacoes || [];
         const formattedAvaliacoes: FormattedAvaliacao[] = avaliacoesDoBackend
-          .filter((avaliacao: Avaliacao) => typeof avaliacao.id === "number")
           .map((avaliacao: Avaliacao) => {
             return {
               id: avaliacao.id as number,
@@ -57,6 +57,7 @@ export default function PerfilPage() {
               data: new Date(avaliacao.createdAt ?? "").toLocaleString("pt-BR"),
               autorNome: user.nome,
               comentarios: avaliacao.comentarios.length,
+              usuario : user
             };
           });
 
@@ -92,14 +93,18 @@ export default function PerfilPage() {
   });
 
   return (
-    <main className="container mx-auto px-4 py-6">
+    <main className="relative container mx-auto px-4 py-6">
       <Header isAuthenticated={isLoggedIn} />
+
+      <button onClick={() => router.push("/")} className="absolute ml-12 mt-12"> 
+        <Image src={"/voltar.svg"} alt="" width={50} height={50}/>
+      </button>
 
       <PerfilCard
         usuarioID={usuarioID}
         isAuthenticated={isLoggedIn}
-        isEditable={!!isEditable} // Passe esta prop para o PerfilCard
-        usuario={usuario} // Passe o objeto usuario para PerfilCard
+        isEditable={!!isEditable} 
+        usuario={usuario} 
       />
 
       <PublicacaoCard

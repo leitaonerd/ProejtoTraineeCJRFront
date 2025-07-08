@@ -7,6 +7,7 @@ import router from "next/router";
 import ModalConfirmar from "../ui/modalConfirmar";
 import { useState } from "react";
 import EditarAvaliacao from "./EditarAvaliacao";
+import { User } from "@/types/user";
 
 interface Publicacao {
   id: number;
@@ -14,6 +15,7 @@ interface Publicacao {
   data: string;
   autorNome: string;
   comentarios: number;
+  usuario : User
 }
 
 interface PublicacaoCardProps {
@@ -34,6 +36,13 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   const [isModalOpenComent, setIsModalOpenComent] = useState(false);
   const [idParaDeletar, setIdParaDeletar] = useState<number | null>(null);
   const [idParaEditar, setIdParaEditar] = useState<number | null>(null);
+
+  const fotoDinamica = (pub : Publicacao) => { 
+     const fotoUrl = pub.usuario.fotoPerfil 
+    ? `${process.env.NEXT_PUBLIC_API_URL}${pub.usuario.fotoPerfil}` 
+    : '/quagsire.png';
+    return fotoUrl
+  }
 
   const deletarAvaliacao = async (id : number) => { 
         if (!isLoggedIn || idParaDeletar === null) return;
@@ -74,7 +83,7 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                   <span>
                     <div className="rounded-full overflow-hidden">
                       <Image
-                        src={imgUser}
+                        src={isProfessor ? fotoDinamica(pub) : imgUser}
                         alt="Foto de usuário"
                         width={32}
                         height={32}

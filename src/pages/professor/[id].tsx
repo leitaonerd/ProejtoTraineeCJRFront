@@ -1,13 +1,14 @@
 import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import { User } from "@/types/user";
 import { Professor } from "@/types/professor";
 import { getProfessor } from "@/services/ApiProfessor";
 import { Avaliacao } from "@/types/avaliacao";
 import Header from "@/components/ui/header";
 import PerfilCardProfessor from "@/components/professorPerfil/PerfilCardProfessor";
 import PublicacaoCard from "@/components/perfil/PublicacaoCard";
+import Image from "next/image";
+import { User } from "@/types/user";
 
 interface FormattedAvaliacao {
   id: number;
@@ -15,6 +16,7 @@ interface FormattedAvaliacao {
   data: string;
   autorNome: string;
   comentarios: number;
+  usuario : User
 }
 
 export default function ProfessorPage() {
@@ -45,9 +47,6 @@ export default function ProfessorPage() {
         const listaAvaliacoes = professor.avaliacoes || [];
         console.log(listaAvaliacoes);
         const formattedAvaliacoes: FormattedAvaliacao[] = listaAvaliacoes
-          .filter(
-            (avaliacao: Avaliacao) => typeof avaliacao.professorID === "number"
-          )
           .map((avaliacao: Avaliacao) => {
             return {
               id: avaliacao.id as number,
@@ -55,6 +54,7 @@ export default function ProfessorPage() {
               data: new Date(avaliacao.createdAt ?? "").toLocaleString("pt-BR"),
               autorNome: avaliacao.usuario?.nome ?? "Undefined",
               comentarios: avaliacao.comentarios.length,
+              usuario : avaliacao.usuario
             };
           });
 
@@ -84,6 +84,10 @@ export default function ProfessorPage() {
   return (
     <main className="container mx-auto px-4 py-6">
       <Header isAuthenticated={isLoggedIn} />
+
+      <button onClick={() => router.push("/")} className="absolute ml-12 mt-12"> 
+        <Image src={"/voltar.svg"} alt="" width={50} height={50}/>
+      </button>
 
       <PerfilCardProfessor professor={professor} />
 
