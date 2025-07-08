@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getProfessores } from '../../services/ApiProfessor';
 import { getDisciplinas } from '../../services/ApiDisciplina';
-import { getAllUsers, getUser } from '../../services/ApiUsuario';
 import { Professor } from '../../types/professor';
 import Modal from '../ui/modal';
 import { Disciplina } from '@/types/disciplina';
@@ -27,14 +26,25 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
       const fetchData = async () => {
         try {
           setLoading(true);
-          const [professoresData, disciplinasData, usuarioData] = await Promise.all([
+          const [professoresData, disciplinasData] = await Promise.all([
             getProfessores(),
             getDisciplinas(),
-            getAllUsers(),
           ]);
           setProfessores(professoresData);
           setDisciplinas(disciplinasData);
-          setUsuarioID(usuarioData.id);
+          
+          // Get user data from localStorage
+          const userDataString = localStorage.getItem('userData');
+          if (userDataString) {
+            const userData = JSON.parse(userDataString);
+            if (userData && userData.id) {
+              setUsuarioID(userData.id);
+            } else {
+              setError("Usuário não encontrado no localStorage");
+            }
+          } else {
+            setError("Dados do usuário não encontrados");
+          }
         } catch (err) {
           setError("Erro ao carregar dados");
         } finally {
@@ -72,15 +82,17 @@ const NovaPublicacaoModal: React.FC<NovaPublicacaoModalProps> = ({ isOpen, onClo
 
     try {
       setLoading(true);
-      await createAvaliacao({
-        usuarioID,
+      //parte do back
+      const avaliacaoData = {
+        usuarioID: usuarioID!,
         professorID: parseInt(professorId),
         disciplinaID: parseInt(disciplinaId),
-        conteudo,
-        comentarios: []
-      });
+        conteudo
+      };
       
-      // Reset form on success
+      await createAvaliacao(avaliacaoData);
+      
+      //reseta os campos
       setProfessorId("");
       setDisciplinaId("");
       setConteudo("");

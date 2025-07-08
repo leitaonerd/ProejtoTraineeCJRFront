@@ -11,8 +11,8 @@ export const getAvaliacao = async (id:number) : Promise<Avaliacao> => {
   return response.data
 }
 
-export const createAvaliacao = async (data : Avaliacao) => {
-  return await api.post("/avaliacoes",data)
+export const createAvaliacao = async (data: Partial<Avaliacao>) => {
+  return await api.post("/avaliacoes", data)
 }
 
 export const delAvaliacao = async ( id : number) => {
