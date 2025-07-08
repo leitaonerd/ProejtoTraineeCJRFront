@@ -4,7 +4,7 @@ import { Comentario } from './comentario';
 import { User } from './user';
 
 export interface Avaliacao{
-  id?: number;
+  id: number;
   conteudo: string;  
 
   professorID: number; 
@@ -14,7 +14,7 @@ export interface Avaliacao{
   disciplina?: Disciplina;
 
   usuarioID: number;
-  usuario?: User
+  usuario: User
   comentarios: Comentario[];
   
   createdAt?: Date;

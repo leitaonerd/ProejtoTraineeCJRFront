@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { theme } from '../../styles/theme';
 import { User } from '@/types/user';
 import { useAuth } from '@/context/AuthContext';
+import router from 'next/router';
 interface HeaderProps {
   isAuthenticated: boolean;
 }
@@ -11,6 +12,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
   const defaultAvatar = '/default-avatar.png';
   const [fotoUrl, setFotoUrl] = useState<string>(defaultAvatar);
+  const [user,setUser] = useState<User>()
   const {logout} = useAuth()
 
   useEffect(() => {
@@ -19,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
     if (userDataString) {
       try {
         const userData: User = JSON.parse(userDataString);
+        setUser(userData)
 
     setFotoUrl(
           userData.fotoPerfil 
@@ -33,13 +36,14 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
     }
   }, []);
 
-  return (    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', backgroundColor: theme.colors.secondary }}>
-      <Image src="/next.svg" alt="Logo" width={50} height={50} />
+  return (    
+  <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 2rem', backgroundColor: theme.colors.secondary }}>
+      <Image src="/LogoUnb.svg" alt="Logo" width={50} height={50} onClick={() => router.push("/")} className='cursor-pointer' />
       <div>
         {isAuthenticated ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             <span>🔔</span>
-            <Image src={fotoUrl} alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%', cursor:'pointer' }} />
+            <Image src={fotoUrl} alt="User Avatar" width={40} height={40} style={{ borderRadius: '50%', cursor:'pointer' }} onClick={() => router.push(`/perfil/${user?.id}`)}/>
             <Image src={"/logout-svgrepo-com.png"} alt="Logout" width={30} height={30} style={{ cursor: 'pointer' }}  onClick={logout} />
           </div>
         ) : (

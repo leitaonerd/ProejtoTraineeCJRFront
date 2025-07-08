@@ -3,8 +3,8 @@ import { User } from "./user";
 export interface Comentario{
     conteudo: string; 
     usuarioID: number; 
-    usuario : User;
+    usuario?: User;
     avaliacaoID: number; 
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

@@ -1,5 +1,6 @@
 import { Comentario } from "@/types/comentario";
 import Image from "next/image";
+import router from "next/router";
 
 const ComentarioCard = ({ comentario }: { comentario: Comentario }) => {
   const fotoUrl = comentario.usuario.fotoPerfil 
@@ -13,7 +14,8 @@ const ComentarioCard = ({ comentario }: { comentario: Comentario }) => {
         alt={`Foto de ${comentario.usuario.nome}`}
         width={32}
         height={32}
-        className="rounded-full object-cover"
+        className="rounded-full object-cover cursor-pointer"
+        onClick={() => router.push(`/perfil/${comentario.usuario.id}`)}
       />
       <div className="flex-1">
         <div className="flex flex-row items-center space-x-2">
