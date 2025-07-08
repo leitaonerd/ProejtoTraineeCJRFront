@@ -14,6 +14,7 @@ export interface Professor {
 }
 
 export interface ProfessorCardProps {
+  id?: number;
   nome: string;
   disciplina: string;
   avatar?: string;

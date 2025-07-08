@@ -56,7 +56,13 @@ const FeedDeslogado: React.FC = () => {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1.5rem", marginBottom: "2rem" }}>
           {novosProfessores.map((professor) => (
-            <ProfessorCard key={professor.id} {...professor} />
+            <ProfessorCard 
+              key={professor.id} 
+              id={professor.id} 
+              nome={professor.nome} 
+              disciplina={professor.departamento} 
+              avatar={professor.fotoPerfil ? `${process.env.NEXT_PUBLIC_API_URL}${professor.fotoPerfil}` : undefined} 
+            />
           ))}
         </div>
         <hr style={{ border: `1px solid ${theme.colors.gray}`, margin: "2rem 0" }} />
@@ -66,7 +72,13 @@ const FeedDeslogado: React.FC = () => {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1.5rem" }}>
           {filteredProfessores.map((professor) => (
-            <ProfessorCard key={professor.id} {...professor} />
+            <ProfessorCard 
+              key={professor.id} 
+              id={professor.id} 
+              nome={professor.nome} 
+              disciplina={professor.departamento} 
+              avatar={professor.fotoPerfil ? `${process.env.NEXT_PUBLIC_API_URL}${professor.fotoPerfil}` : undefined} 
+            />
           ))}
         </div>
       </main>
