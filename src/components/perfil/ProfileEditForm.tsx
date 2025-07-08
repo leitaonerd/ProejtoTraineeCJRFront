@@ -55,6 +55,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
     if (nome) formData.append('nome', nome);
     if (email) formData.append('email', email);
     if (curso) formData.append('curso', curso);
+    if (newPassword) formData.append('senha',newPassword)
     if (departamento) formData.append('departamento', departamento);
     if (fotoPerfil) formData.append('fotoPerfil', fotoPerfil);
 
@@ -73,7 +74,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
       console.error("Erro ao atualizar perfil:", error);
       const errorMsg = error.response?.data?.message || 'Falha ao atualizar o perfil. Tente novamente.';
       setErrors({ email: errorMsg }); // Mostra um erro geral vindo da API
-      alert(errorMsg);
+      if(error.status == 401){alert("email ou senha incorretos");}
     } finally {
       setLoading(false);
     }

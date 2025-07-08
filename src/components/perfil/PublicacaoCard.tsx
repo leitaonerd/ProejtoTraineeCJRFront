@@ -101,7 +101,7 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                   <MessageSquare className="w-4 h-4" />
                   <span>
                     {pub.comentarios} comentário
-                    {pub.comentarios !== 1 ? "s" : ""}
+                    {pub.comentarios == 1 ? "s" : ""}
                   </span>
                 </div>
                 {isEditable && ( 

@@ -14,3 +14,7 @@ export const getComentario = async (id:number) => {
 export const createComentario = async (data : Comentario) => {
   return await api.post(`/comentario`,data)
 }
+
+export const delComentario = async (id : Number) => {
+  return await api.delete(`/comentario/${id}`)
+}

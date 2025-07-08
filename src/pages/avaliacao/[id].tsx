@@ -18,7 +18,7 @@ import CriarComentario from "@/components/ui/modalComentario";
 export default function AvaliacaoIdPage() {
   const router = useRouter();
   const { isLoggedIn, loading: authLoading,user: loggedInUser } = useAuth();
-  
+  const defaultAvatar = '/default-avatar.png';
   const [avaliacao, setAvaliacao] = useState<Avaliacao | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function AvaliacaoIdPage() {
   const isEditable = isLoggedIn && loggedInUser && loggedInUser?.id === avaliacao?.usuario?.id;
   const fotoUrl = avaliacao?.usuario?.fotoPerfil 
     ? `${process.env.NEXT_PUBLIC_API_URL}${avaliacao?.usuario?.fotoPerfil}` 
-    : '/default-avatar.png'; // Imagem padrão
+    : defaultAvatar; // Imagem padrão
   
   const { id } = router.query;
 
