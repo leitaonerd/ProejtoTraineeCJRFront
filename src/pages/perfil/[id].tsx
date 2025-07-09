@@ -112,7 +112,7 @@ export default function PerfilPage() {
         imgUser={
           usuario.fotoPerfil
             ? `${process.env.NEXT_PUBLIC_API_URL}${usuario.fotoPerfil}`
-            : "/profile.svg"
+            : "/quagsire.png"
         }
         isEditable={!!isEditable}
         isProfessor={false}

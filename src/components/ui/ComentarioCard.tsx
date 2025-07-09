@@ -7,7 +7,7 @@ import router from "next/router";
 import { useState } from "react";
 
 const ComentarioCard = ({ comentario }: { comentario: Comentario }) => {
-  const defaultAvatar = '/default-avatar.png';
+  const defaultAvatar = '/quagsire.png';
   const { isLoggedIn,user: loggedInUser } = useAuth();
   const isOwner = isLoggedIn && loggedInUser?.id === comentario.usuario?.id;
   const fotoUrl = comentario.usuario?.fotoPerfil 

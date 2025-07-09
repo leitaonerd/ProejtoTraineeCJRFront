@@ -12,13 +12,16 @@ export const getAvaliacao = async (id:number) : Promise<Avaliacao> => {
 }
 
 export const createAvaliacao = async (data: Partial<Avaliacao>) => {
-  return await api.post("/avaliacoes", data)
+  const token = localStorage.getItem("token");
+  return await api.post("/avaliacoes", data,{headers:{Authorization : `Bearer ${token}`}})
 }
 
 export const delAvaliacao = async ( id : number) => {
+    const token = localStorage.getItem("token");
     return await api.delete(`/avaliacoes/${id}`)
 }
 
 export const updateAvaliacao = async (id : number, conteudo : UpdateAvaliacao) => {
-  return await api.put(`/avaliacoes/${id}`,conteudo)
+  const token = localStorage.getItem("token");
+  return await api.put(`/avaliacoes/${id}`,conteudo,{headers:{Authorization : `Bearer ${token}`}})
 }

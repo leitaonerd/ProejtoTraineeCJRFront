@@ -7,12 +7,16 @@ export const getAllUsers = async () => {
 };
 
 export const getUser = async (id: number): Promise<User> => {
-  console.log("getUser chamado");
   const response = await api.get(`/usuario/${id}`);
-  //console.log(response.data);
   return response.data;
 };
 
 export const deletarUser = async (id: number) => {
-  return await api.delete(`/usuario/${id}`);
+  const token = localStorage.getItem("token");
+  return await api.delete(`/usuario/${id}`,{headers:{Authorization : `Bearer ${token}`}});
 };
+
+export const updateUsers = async (form : FormData, id:number) => {
+  const token = localStorage.getItem("token");
+  return await api.put(`/usuario/${id}`, form,{headers:{Authorization : `Bearer ${token}`}});
+}
