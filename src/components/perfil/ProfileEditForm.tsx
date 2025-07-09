@@ -5,6 +5,7 @@ import Input from '../ui/Input';
 import { UpdateUser, User } from '@/types/user';
 import api from '@/services/api';
 import { useAuth } from '@/context/AuthContext';
+import { updateUsers } from '@/services/ApiUsuario';
 
 interface ProfileEditFormProps {
   onClose: () => void;
@@ -55,6 +56,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
     if (nome) formData.append('nome', nome);
     if (email) formData.append('email', email);
     if (curso) formData.append('curso', curso);
+    if (newPassword) formData.append('senha',newPassword)
     if (departamento) formData.append('departamento', departamento);
     if (fotoPerfil) formData.append('fotoPerfil', fotoPerfil);
 
@@ -63,7 +65,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
       if (!userId) {
         throw new Error("ID do usuário não encontrado. Faça o login novamente.");
       }
-      const response = await api.put(`/usuario/${userId}`, formData);
+      const response = await updateUsers(formData,userId)
       const updatedUser = response.data; 
       updateUser(updatedUser)
       
@@ -72,8 +74,8 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
     } catch (error: any) {
       console.error("Erro ao atualizar perfil:", error);
       const errorMsg = error.response?.data?.message || 'Falha ao atualizar o perfil. Tente novamente.';
-      setErrors({ email: errorMsg }); // Mostra um erro geral vindo da API
-      alert(errorMsg);
+      setErrors({ email: errorMsg }); 
+      if(error.status == 401){alert("email ou senha incorretos");}
     } finally {
       setLoading(false);
     }

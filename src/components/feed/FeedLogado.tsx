@@ -72,7 +72,13 @@ const FeedLogado: React.FC = () => {
           }}
         >
           {novosProfessores.map((professor) => (
-            <ProfessorCard disciplina={""} key={professor.id} {...professor} />
+            <ProfessorCard 
+              key={professor.id} 
+              id={professor.id} 
+              nome={professor.nome} 
+              disciplina={professor.departamento} 
+              avatar={professor.fotoPerfil ? `${process.env.NEXT_PUBLIC_API_URL}${professor.fotoPerfil}` : undefined} 
+            />
           ))}
         </div>
         <hr style={{ border: `1px solid ${theme.colors.gray}`, margin: "2rem 0" }} />
@@ -111,7 +117,13 @@ const FeedLogado: React.FC = () => {
           }}
         >
           {filteredProfessores.map((professor) => (
-            <ProfessorCard disciplina={""} key={professor.id} {...professor} />
+            <ProfessorCard 
+              key={professor.id} 
+              id={professor.id} 
+              nome={professor.nome} 
+              disciplina={professor.departamento} 
+              avatar={professor.fotoPerfil ? `${process.env.NEXT_PUBLIC_API_URL}${professor.fotoPerfil}` : undefined} 
+            />
           ))}
         </div>
         <NovaPublicacaoModal

@@ -10,7 +10,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated }) => {
-  const defaultAvatar = '/default-avatar.png';
+  const defaultAvatar = '/quagsire.png';
   const [fotoUrl, setFotoUrl] = useState<string>(defaultAvatar);
   const [user,setUser] = useState<User>()
   const {logout} = useAuth()

@@ -31,6 +31,7 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
   isEditable, // Receba a prop isEditable
   isProfessor,
 }) => {
+  const [isEditableTrue,setIsEditableTrue] = useState(false)
   const { isLoggedIn, loading, user: loggedInUser } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenComent, setIsModalOpenComent] = useState(false);
@@ -43,7 +44,6 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
     : '/quagsire.png';
     return fotoUrl
   }
-
   const deletarAvaliacao = async (id : number) => { 
         if (!isLoggedIn || idParaDeletar === null) return;
         try{
@@ -73,7 +73,8 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Publicações
             </h3>
-            {publicacoes.map((pub) => (
+            {publicacoes.map((pub) =>{
+              const canEditOrDelete = isEditable || (loggedInUser?.id === pub.usuario?.id); return (
               <div
                 key={pub.id}
                 onClick={() => handleCardClick(pub.id)}
@@ -101,10 +102,10 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                   <MessageSquare className="w-4 h-4" />
                   <span>
                     {pub.comentarios} comentário
-                    {pub.comentarios !== 1 ? "s" : ""}
+                    {pub.comentarios == 1 ? "s" : ""}
                   </span>
                 </div>
-                {isEditable && ( 
+                {canEditOrDelete && ( 
                   <div className="flex justify-end gap-2 mt-2">
                     <button onClick={(event) => { event.stopPropagation(); setIdParaEditar(pub.id); }}>✏️</button>
                     <button onClick={(event) => { event.stopPropagation(); setIdParaDeletar(pub.id); }}>🗑️</button>
@@ -120,13 +121,16 @@ const PublicacaoCard: React.FC<PublicacaoCardProps> = ({
                 <ModalConfirmar
                   isOpen={idParaDeletar === pub.id}
                   onClose={() => setIdParaDeletar(null)}
-                  onConfirm={() => deletarAvaliacao}
+                  onConfirm={() => {
+                        if (typeof idParaDeletar === 'number') {
+                            deletarAvaliacao(idParaDeletar);
+                        }}}
                   title="Confirmar Exclusão da Avaliação"
                 >
                 <p>Você tem certeza que deseja excluir sua Avaliação? Esta ação não pode ser desfeita.</p>
                 </ModalConfirmar>
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>
