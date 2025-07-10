@@ -41,10 +41,18 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({onClose}) => {
     setLoading(true);
     let formErrors: { [key: string]: string } = {};
 
-    if (newPassword && newPassword !== confirmNewPassword) {
-      formErrors.confirmNewPassword = 'As novas senhas não coincidem.';
+     if (newPassword) {
+        if (!currentPassword) {
+            formErrors.currentPassword = 'Por favor, informe sua senha atual.';
+        }
+        if (!confirmNewPassword) {
+            formErrors.confirmNewPassword = 'Por favor, confirme a nova senha.';
+        }
+        if (newPassword !== confirmNewPassword) {
+            formErrors.confirmNewPassword = 'As novas senhas não coincidem.';
+        }
     }
-
+    
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       setLoading(false);
